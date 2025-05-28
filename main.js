@@ -267,8 +267,14 @@ class PrivacyGlassesPlugin extends obsidian.Plugin {
                 tags.push(...this.app.metadataCache.getFileCache(view.file).tags.filter(x => !!x.tag).map(x => x.tag));
             }
             // Get tags in properties, if any
-            if ('tags' in ((_a = this.app.metadataCache.getFileCache(view.file)) === null || _a === void 0 ? void 0 : _a.frontmatter)) {
-                tags.push(...this.app.metadataCache.getFileCache(view.file).frontmatter.tags.filter((x) => !!x));
+            let frontmatter = this.app.metadataCache.getFileCache(view.file)?.frontmatter
+            if (frontmatter && 'tags' in frontmatter) { // here
+            // if ('tags' in ((_a = this.app.metadataCache.getFileCache(view.file)) === null || _a === void 0 ? void 0 : _a.frontmatter)) {
+                const frontmatterTags = this.app.metadataCache.getFileCache(view.file).frontmatter.tags;
+                if (Array.isArray(frontmatterTags)) {
+                    tags.push(...frontmatterTags.filter((x) => !!x));
+                }
+                // tags.push(...this.app.metadataCache.getFileCache(view.file).frontmatter.tags.filter((x) => !!x));
             }
             if (tags && tags.length > 0) {
                 return !tags.includes(this.settings.privateNoteMarker);
